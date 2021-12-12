@@ -1,0 +1,12 @@
+{
+  "transactions": [
+    {
+      "title": "Aluguel",
+      "amount": 1050,
+      "category": "Casa",
+      "type": "withdraw",
+      "createdAt": "2021-12-08T14:12:31.494Z",
+      "id": 1
+    }
+  ]
+}

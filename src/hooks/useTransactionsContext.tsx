@@ -31,9 +31,8 @@ export function TransactionProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/transactions')
-      .then(response => response.json())
-      .then(response => setTransactions(response))
+    api.get('/transactions')
+      .then(response => setTransactions(response.data))
 
   }, []);
 
@@ -55,7 +54,7 @@ export function TransactionProvider({ children }: TransactionsProviderProps) {
     }
   }
 
-  const removeTransaction = (transactionId: number) => {
+  async function removeTransaction(transactionId: number) {
     try {
       const updatedTransaction = [...transactions];
       const transactionIndex = updatedTransaction.findIndex(transaction => transaction.id === transactionId);
@@ -66,19 +65,16 @@ export function TransactionProvider({ children }: TransactionsProviderProps) {
         throw Error();
       }
 
-      fetch('http://localhost:3333/transactions/' + transactionId, { method: 'DELETE' })
-        .then(async response => {
-          const data = await response.json();
+      const response = await api.delete('/transactions/' + transactionId)
 
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response status
-            const error = (data && data.message) || response.status;
-            return Promise.reject(error);
-          }
+      // check for error response
+      if (response.data.ok) {
+        // get error message from body or default to response status
+        const error = (response.data && response.data.message) || response.status;
+        return Promise.reject(error);
+      }
 
-          setTransactions(updatedTransaction);
-        })
+      setTransactions(updatedTransaction);
     } catch {
       toast.error('Erro na remoção da transação');
     }

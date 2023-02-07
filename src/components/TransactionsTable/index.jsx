@@ -5,7 +5,7 @@ import { Container } from "./styles";
 export function TransactionsTable(){
   const { transactions, removeTransaction } = useTransactions(); 
 
-  function handleRemoveTransaction(transactionId: number) {
+  function handleRemoveTransaction(transactionId) {
     removeTransaction(transactionId);
   }
 
